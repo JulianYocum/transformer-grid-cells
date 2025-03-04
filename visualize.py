@@ -257,12 +257,12 @@ def compute_pos_ratemaps(trajectory_generator, options, res=20, n_avg=None, Np=5
 
 
 # Perform UMAP visualization in 3D, with optional PCA preprocessing
-import umap
+from umap import UMAP
 from sklearn.decomposition import PCA
 import matplotlib.pyplot as plt
 from mpl_toolkits.mplot3d import Axes3D
 
-def visualize_umap_3d(data, use_pca_first=True, pca_components=6, random_state=42):
+def visualize_umap_3d(data, use_pca_first=True, pca_components=6, random_state=42, n_neighbors=15, min_dist=0.5, metric='cosine', init='random', n_epochs=1000):
     """
     Visualize data in 3D using UMAP, with optional PCA preprocessing.
     
@@ -284,12 +284,14 @@ def visualize_umap_3d(data, use_pca_first=True, pca_components=6, random_state=4
     
     # Apply UMAP for 3D visualization
     print("Applying UMAP to create 3D visualization...")
-    reducer = umap.UMAP(
+    reducer = UMAP(
         n_components=3, 
-        n_neighbors=15, # 15
-        metric='cosine',
-        min_dist=0.5, # 0.5
-        init='spectral',
+        n_neighbors=n_neighbors, # 15
+        metric=metric,
+        min_dist=min_dist, # 0.5
+        init=init,
+        n_epochs=n_epochs,
+        
         random_state=random_state
     )
     embedding = reducer.fit_transform(data_transformed)
